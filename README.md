@@ -1,6 +1,6 @@
 ##CSS-Compressor
 
-## usage:
+usage:
 
 `
 ./compressor.out style.css
@@ -19,6 +19,8 @@ span:before {
 span:before{content:'Hello, what is \'Big Ban\'?';}
 ```
 
+<hr>
+
 ###output:
 `
 Compressed: min.style.css
@@ -29,7 +31,7 @@ Compressed: min.style.css
 
 <hr>
 
-##you can use -m flag to rewrite soure file
+###you can use -m flag to rewrite soure file
 
 `
 ./compressor.out style.css -m
