@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <stdbool.h>
 #include <sys/stat.h>
 #include "functions.h"
@@ -44,26 +45,34 @@ void printResult(char fileName[], size_t baseFileSize) {
 	printf("Compressed: %s\n", fileName);
 	
 	if ( baseFileSize >= 1024 ) {
-		printf("  | base: %zd kb\n", baseFileSize / 1024);
-		printf("  | min:  %zd kb\n", getFileSize(fileName) / 1024);
+		printf("   base: %zd kb\n", baseFileSize / 1024);
+		printf("   min:  %zd kb\n", getFileSize(fileName) / 1024);
 	} else {
-		printf("  | base: %zd bytes\n", baseFileSize);
-		printf("  | min:  %zd bytes\n", getFileSize(fileName));	
+		printf("   base: %zd bytes\n", baseFileSize);
+		printf("   min:  %zd bytes\n", getFileSize(fileName));	
 	}
 	
 	if ( diff >= 1024 ) {
-		printf("  | diff: %zd kb\n", diff / 1024);
+		printf("   diff: %zd kb\n", diff / 1024);
 	} else {
-		printf("  | diff: %zd bytes\n", diff);
+		printf("   diff: %zd bytes\n", diff);
+	}
+}
+
+void arrayClear(char array[], int len) {
+	for ( int i = 0; i < len; i++ ) {
+		array[i] = (char) 0;
 	}
 }
 
 void readToBuffer(FILE *file, char buffer[]) {
+	int betweenSelectorsCounter = 0;
+	int counter = 0;
+	char betweenSelectors[30];
 	char prevScanedSymbol;
 	char prevWritedSymbol;
 	char scanedSymbol;
-	int counter = 0;
-	bool isSelector = false;
+	bool isSelector = true;
 	bool isStr = false;
 	
 	while ( fscanf(file, "%c", &scanedSymbol) != EOF ) {
@@ -73,7 +82,24 @@ void readToBuffer(FILE *file, char buffer[]) {
 			isStr = false;
 		}
 		
-		if ( scanedSymbol != ASCII_SPACE && scanedSymbol != ASCII_TAB && scanedSymbol != ASCII_NEW_LINE || isStr || isSelector ) {
+		if ( scanedSymbol != ASCII_SPACE && scanedSymbol != ASCII_TAB && scanedSymbol != ASCII_NEW_LINE || isStr ) {
+			if ( scanedSymbol == ASCII_SCOPE_OPEN ) {
+				arrayClear(betweenSelectors, betweenSelectorsCounter);
+				betweenSelectorsCounter = 0;
+				
+				isSelector = false;
+			}
+			
+			if ( isSelector && betweenSelectorsCounter > 0 ) {
+				for ( int i = 0; i < strlen(betweenSelectors); i++ ) {
+					buffer[counter] = betweenSelectors[i];
+					counter += 1; 
+				}
+				
+				arrayClear(betweenSelectors, betweenSelectorsCounter);
+				betweenSelectorsCounter = 0;
+			}
+			
 			buffer[counter] = scanedSymbol;
 			counter += 1;
 			
@@ -81,11 +107,10 @@ void readToBuffer(FILE *file, char buffer[]) {
 				isSelector = true;
 			}
 			
-			if ( scanedSymbol == ASCII_SCOPE_OPEN ) {
-				isSelector = false;
-			}
-			
 			prevWritedSymbol = scanedSymbol;
+		} else if ( isSelector ) {
+			betweenSelectors[betweenSelectorsCounter] = scanedSymbol;
+			betweenSelectorsCounter += 1;
 		}
 		
 		prevScanedSymbol = scanedSymbol;

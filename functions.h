@@ -6,6 +6,8 @@ void printInfo();
 
 void printResult(char fileName[], size_t baseFileSize);
 
+void arrayClear(char array[], int len);
+
 void readToBuffer(FILE *file, char buffer[]);
 
 char parseFlag(char flag[]);
