@@ -1,21 +1,23 @@
-usage:
+## usage:
+
 `
 ./compressor.out style.css
 `
 
 
-style.css
+###style.css
 ```css
 span:before {
   content: 'Hello, what is \'Big Ban\'?';
 }
 ```
 
-min.style.css
+###min.style.css
 ```css
 span:before{content:'Hello, what is \'Big Ban\'?';}
 ```
 
+###output:
 `
 Compressed: min.style.css
   | base: 58 bytes
@@ -24,7 +26,7 @@ Compressed: min.style.css
 `
 
 
-you can use -m flag to rewrite soure file
+##you can use -m flag to rewrite soure file
 
 `
 ./compressor.out style.css -m
