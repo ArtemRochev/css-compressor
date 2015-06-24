@@ -3,6 +3,7 @@ usage:
 ./compressor.out style.css
 `
 
+
 style.css
 ```css
 span:before {
@@ -21,6 +22,7 @@ Compressed: min.style.css
   | min:  51 bytes
   | diff: 7 bytes
 `
+
 
 you can use -m flag to rewrite soure file
 
