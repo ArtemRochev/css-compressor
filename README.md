@@ -1,3 +1,5 @@
+##CSS-Compressor
+
 ## usage:
 
 `
@@ -5,14 +7,14 @@
 `
 
 
-###style.css
+**style.css**
 ```css
 span:before {
   content: 'Hello, what is \'Big Ban\'?';
 }
 ```
 
-###min.style.css
+**min.style.css**
 ```css
 span:before{content:'Hello, what is \'Big Ban\'?';}
 ```
@@ -25,6 +27,7 @@ Compressed: min.style.css
   | diff: 7 bytes
 `
 
+<hr>
 
 ##you can use -m flag to rewrite soure file
 
