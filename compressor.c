@@ -2,15 +2,16 @@
 #include <string.h>
 #include "functions.h"
 
-#define BUFFER_LEN 500000
+#define BUFFER_LEN 5000000
 #define FILE_NAME_LEN 100
 
 int main(int argc, char **argv) {
 	FILE *file;
 	char targetFileName[FILE_NAME_LEN];
 	char buffer[BUFFER_LEN];
-	char flag;
+	size_t baseFileSize;
 	int fileNameLen;
+	char flag;
 	
 	if ( argv[1] == NULL ) {
 		printInfo();
@@ -20,6 +21,7 @@ int main(int argc, char **argv) {
 	
 	strcpy(targetFileName, argv[1]);
 	fileNameLen = strlen(targetFileName);
+	baseFileSize =  getFileSize(targetFileName);
 	flag = parseFlag(argv[2]);
 	file = fopen(targetFileName, "r");
 	
@@ -31,8 +33,9 @@ int main(int argc, char **argv) {
 	
 	file = fopen(targetFileName, "w");
 	fprintf(file, "%s", buffer);
+	fclose(file);
 	
-	printf("Compressed: %s\n", targetFileName);
+	printResult(targetFileName, baseFileSize);
 	
 	return 0;
 }
