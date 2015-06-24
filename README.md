@@ -1,12 +1,16 @@
+`
+./compressor.out style.css
+`
 
-input:
+
+soure:
 ```css
-span {
+span:before {
   content: 'Hello, what is \'Big Ban\'?';
 }
 ```
 
 output:
 ```css
-span{content:'Hello, what is \'Big Ban\'?';}
+span:before{content:'Hello, what is \'Big Ban\'?';}
 ```
