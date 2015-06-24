@@ -1,5 +1,5 @@
 ##CSS-Compressor
-O(N) time
+>O(N) time
 
 **usage:**
 
