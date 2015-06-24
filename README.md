@@ -11,13 +11,17 @@
 **style.css**
 ```css
 span:before {
-  content: 'Hello, what is \'Big Ban\'?';
+  content: 'What is \'Big Ban\'?';
+}
+
+li .block {
+  background: red;
 }
 ```
 
 **min.style.css**
 ```css
-span:before{content:'Hello, what is \'Big Ban\'?';}
+span:before{content:'What is \'Big Ban\'?';}li .block{color:red;}
 ```
 
 <hr>
