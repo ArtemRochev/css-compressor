@@ -1,16 +1,16 @@
+usage:
 `
 ./compressor.out style.css
 `
 
-
-soure:
+style.css
 ```css
 span:before {
   content: 'Hello, what is \'Big Ban\'?';
 }
 ```
 
-output:
+min.style.css
 ```css
 span:before{content:'Hello, what is \'Big Ban\'?';}
 ```
@@ -23,6 +23,7 @@ Compressed: min.style.css
 `
 
 you can use -m flag to rewrite soure file
+
 `
 ./compressor.out style.css -m
 `
