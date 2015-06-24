@@ -7,7 +7,9 @@
 #define ASCII_TAB 9
 #define ASCII_NEW_LINE 10
 #define ASCII_BACK_SLASH 92
-#define ASCII_SCOPE 39
+#define ASCII_SINGLE_SCOPE 39
+#define ASCII_SCOPE_OPEN 123
+#define ASCII_SCOPE_CLOSE 125
 
 #define true 1
 #define false 0
@@ -58,20 +60,32 @@ void printResult(char fileName[], size_t baseFileSize) {
 
 void readToBuffer(FILE *file, char buffer[]) {
 	char prevScanedSymbol;
+	char prevWritedSymbol;
 	char scanedSymbol;
 	int counter = 0;
-	bool isScope = false;
+	bool isSelector = false;
+	bool isStr = false;
 	
 	while ( fscanf(file, "%c", &scanedSymbol) != EOF ) {
-		if ( scanedSymbol == ASCII_SCOPE && !isScope ) {
-			isScope = true;
-		} else if ( scanedSymbol == ASCII_SCOPE && prevScanedSymbol != ASCII_BACK_SLASH ) {
-			isScope = false;
+		if ( scanedSymbol == ASCII_SINGLE_SCOPE && !isStr ) {
+			isStr = true;
+		} else if ( scanedSymbol == ASCII_SINGLE_SCOPE && prevScanedSymbol != ASCII_BACK_SLASH ) {
+			isStr = false;
 		}
 		
-		if ( scanedSymbol != ASCII_SPACE && scanedSymbol != ASCII_TAB && scanedSymbol != ASCII_NEW_LINE || isScope ) {
+		if ( scanedSymbol != ASCII_SPACE && scanedSymbol != ASCII_TAB && scanedSymbol != ASCII_NEW_LINE || isStr || isSelector ) {
 			buffer[counter] = scanedSymbol;
 			counter += 1;
+			
+			if ( prevWritedSymbol == ASCII_SCOPE_CLOSE ) {
+				isSelector = true;
+			}
+			
+			if ( scanedSymbol == ASCII_SCOPE_OPEN ) {
+				isSelector = false;
+			}
+			
+			prevWritedSymbol = scanedSymbol;
 		}
 		
 		prevScanedSymbol = scanedSymbol;
