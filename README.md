@@ -21,7 +21,7 @@ span:before{content:'Hello, what is \'Big Ban\'?';}
 
 <hr>
 
-###output:
+**output:**
 ```
 Compressed: min.style.css
   | base: 58 bytes
