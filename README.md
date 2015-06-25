@@ -35,6 +35,22 @@ Compressed: min.style.css
 ```
 
 <hr>
+you can use -a flag to compress all CSS files in current dir
+
+`
+./compressor.out -a
+`
+result:
+```
+  | min
+  |  | min.menu.css
+  |  | min.sidebar.css
+  |  | min.footer.css
+  | menu.css
+  | sidebar.css
+  | footer.css
+```
+<hr>
 
 you can use -m flag to rewrite soure file
 
