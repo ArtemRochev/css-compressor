@@ -40,13 +40,13 @@ you can use -a flag to compress all CSS files in current dir
 `
 result:
 ```
-  └── min
-  |   └── min.menu.css
-  |   └── min.sidebar.css
-  |   └── min.footer.css
-  └── menu.css
-  └── sidebar.css
-  └── footer.css
+  min
+   └── min.menu.css
+   └── min.sidebar.css
+   └── min.footer.css
+  menu.css
+  sidebar.css
+  footer.css
 ```
 <hr>
 
