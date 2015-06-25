@@ -11,6 +11,8 @@
 #define ASCII_SINGLE_SCOPE 39
 #define ASCII_SCOPE_OPEN 123
 #define ASCII_SCOPE_CLOSE 125
+#define ASCII_DOUBLE_DOT 58
+#define ASCII_SEMICOLON 59
 
 #define true 1
 #define false 0
@@ -59,20 +61,22 @@ void printResult(char fileName[], size_t baseFileSize) {
 	}
 }
 
-void arrayClear(char array[], int len) {
+int arrayClear(char array[], int len) {
 	for ( int i = 0; i < len; i++ ) {
 		array[i] = (char) 0;
 	}
+	
+	return 0;
 }
 
 void readToBuffer(FILE *file, char buffer[]) {
-	int betweenSelectorsCounter = 0;
+	int importantPartBufferCounter = 0;
 	int counter = 0;
-	char betweenSelectors[30];
+	char importantPartBuffer[30];
 	char prevScanedSymbol;
 	char prevWritedSymbol;
 	char scanedSymbol;
-	bool isSelector = true;
+	bool isImportantPart = true;
 	bool isStr = false;
 	
 	while ( fscanf(file, "%c", &scanedSymbol) != EOF ) {
@@ -83,34 +87,32 @@ void readToBuffer(FILE *file, char buffer[]) {
 		}
 		
 		if ( scanedSymbol != ASCII_SPACE && scanedSymbol != ASCII_TAB && scanedSymbol != ASCII_NEW_LINE || isStr ) {
-			if ( scanedSymbol == ASCII_SCOPE_OPEN ) {
-				arrayClear(betweenSelectors, betweenSelectorsCounter);
-				betweenSelectorsCounter = 0;
-				
-				isSelector = false;
+			if ( scanedSymbol == ASCII_SCOPE_OPEN || scanedSymbol == ASCII_SEMICOLON ) {
+				importantPartBufferCounter = arrayClear(importantPartBuffer, importantPartBufferCounter);
+				isImportantPart = false;
 			}
 			
-			if ( isSelector && betweenSelectorsCounter > 0 ) {
-				for ( int i = 0; i < strlen(betweenSelectors); i++ ) {
-					buffer[counter] = betweenSelectors[i];
+			if ( isImportantPart && importantPartBufferCounter > 0 ) {
+				for ( int i = 0; i < strlen(importantPartBuffer); i++ ) {
+					buffer[counter] = importantPartBuffer[i];
 					counter += 1; 
 				}
 				
-				arrayClear(betweenSelectors, betweenSelectorsCounter);
-				betweenSelectorsCounter = 0;
+				arrayClear(importantPartBuffer, importantPartBufferCounter);
+				importantPartBufferCounter = 0;
 			}
 			
 			buffer[counter] = scanedSymbol;
 			counter += 1;
 			
-			if ( prevWritedSymbol == ASCII_SCOPE_CLOSE ) {
-				isSelector = true;
+			if ( prevWritedSymbol == ASCII_SCOPE_CLOSE || prevWritedSymbol == ASCII_DOUBLE_DOT ) {
+				isImportantPart = true;
 			}
 			
 			prevWritedSymbol = scanedSymbol;
-		} else if ( isSelector ) {
-			betweenSelectors[betweenSelectorsCounter] = scanedSymbol;
-			betweenSelectorsCounter += 1;
+		} else if ( isImportantPart ) {
+			importantPartBuffer[importantPartBufferCounter] = scanedSymbol;
+			importantPartBufferCounter += 1;
 		}
 		
 		prevScanedSymbol = scanedSymbol;
