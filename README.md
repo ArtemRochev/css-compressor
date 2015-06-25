@@ -29,9 +29,7 @@ span:before{content:'What is \'Big Ban\'?';}li .block{border:1px solid red;}
 **output:**
 ```
 Compressed: min.style.css
-  | base: 58 bytes
-  | min:  51 bytes
-  | diff: 7 bytes
+            -7 bytes
 ```
 
 <hr>
@@ -42,13 +40,13 @@ you can use -a flag to compress all CSS files in current dir
 `
 result:
 ```
-  | min
-  |  | min.menu.css
-  |  | min.sidebar.css
-  |  | min.footer.css
-  | menu.css
-  | sidebar.css
-  | footer.css
+  └── min
+  |   └── min.menu.css
+  |   └── min.sidebar.css
+  |   └── min.footer.css
+  └── menu.css
+  └── sidebar.css
+  └── footer.css
 ```
 <hr>
 
