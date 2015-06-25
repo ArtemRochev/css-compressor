@@ -1,15 +1,25 @@
 size_t getFileSize(char fileName[]);
 
+const char* getFileExt(char str[]);
+
 char parseFlag(char flag[]);
 
 int arrayClear(char array[], int len);
 
-int addPrefix(char array[], int len);
+int writeToEnd(char destination[], char source[], int sourceLen);
 
-void arrayShift(char array[], int len, int offset);
+void addPrefix(char array[]);
+
+int isFlag(char str[]);
+
+int isCss(char str[]);
 
 void printInfo();
 
-void printResult(char fileName[], size_t baseFileSize);
+void printFileInfo(char fileName[], size_t fileSize, size_t newFileSize);
+
+void createDirForCompressed(char array[]);
 
 void readToBuffer(FILE *file, char buffer[]);
+
+void compressFile(char fileName[], char targetFileName[], char flag);

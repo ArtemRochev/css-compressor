@@ -2,6 +2,8 @@
 #include <string.h>
 #include <stdbool.h>
 #include <sys/stat.h>
+#include <unistd.h>
+#include <sys/types.h>
 #include "functions.h"
 
 #define ASCII_SPACE 32
@@ -16,6 +18,7 @@
 
 #define true 1
 #define false 0
+#define BUFFER_LEN 5000000
 
 size_t getFileSize(char fileName[]) {
 	struct stat st;
@@ -25,40 +28,28 @@ size_t getFileSize(char fileName[]) {
 	return st.st_size;
 }
 
-void arrayShift(char array[], int len, int offset) {
-	int last = len - 1;
-	
-	for ( int i = last; i >= 0; i-- ) {
-		array[i+offset] = array[i];
+const char* getFileExt(char str[]) {
+	char *ext;
+
+  	ext = strrchr (str, '.');
+
+  	if ( ext != NULL ) {
+  	    return ext;
 	}
+	
+  	return "";
 }
 
-void printInfo() {
-	printf("Compress CSS file.\n");
-	printf("Removing spaces, tabs, new line charters.\n\n");
-	printf("Usage:\n");
-	printf("./compressor.out <file_name>\n\n");
-	printf("-m    modified source file\n");
-}
-
-void printResult(char fileName[], size_t baseFileSize) {
-	size_t diff = baseFileSize - getFileSize(fileName);
-	
-	printf("Compressed: %s\n", fileName);
-	
-	if ( baseFileSize >= 1024 ) {
-		printf("   base: %zd kb\n", baseFileSize / 1024);
-		printf("   min:  %zd kb\n", getFileSize(fileName) / 1024);
-	} else {
-		printf("   base: %zd bytes\n", baseFileSize);
-		printf("   min:  %zd bytes\n", getFileSize(fileName));	
+char parseFlag(char flag[]) {
+	if ( flag == NULL ) {
+		return (char) 0;
 	}
 	
-	if ( diff >= 1024 ) {
-		printf("   diff: %zd kb\n", diff / 1024);
-	} else {
-		printf("   diff: %zd bytes\n", diff);
+	if ( flag[0] == '-') {
+		return flag[1];
 	}
+	
+	return (char) 0;
 }
 
 int arrayClear(char array[], int len) {
@@ -67,6 +58,70 @@ int arrayClear(char array[], int len) {
 	}
 	
 	return 0;
+}
+
+int writeToEnd(char destination[], char source[], int sourceLen) {
+	int destinationLen = strlen(destination);
+	
+	for ( int i = 0; i < sourceLen; i++ ) {
+		destination[destinationLen] = source[i];
+		destinationLen += 1; 
+	}
+	
+	return destinationLen;
+}
+
+void addPrefix(char array[]) {
+	char result[100] = "min.";
+	
+	strcat(result, array);
+	strcpy(array, result);
+}
+
+int isFlag(char str[]) {
+	if ( str[0] == '-' && strlen(str) == 2 ) {
+		return true;
+	}
+	
+	return false;
+}
+
+int isCss(char str[]) {
+	if ( strcmp(getFileExt(str), ".css") == 0 ) {
+		return true;
+	}
+	
+	return false;
+}
+
+void printInfo() {
+	printf("Compress CSS file.\n");
+	printf("Removing spaces, tabs, new line charters.\n\n");
+	printf("Usage:\n");
+	printf("./compressor.out <file_name>\n\n");
+	printf("-a    compress all css files in dir and put in new /min dir\n");
+	printf("-m    modified source file\n");
+}
+
+void printFileInfo(char fileName[], size_t fileSize, size_t newFileSize) {
+	size_t diff =  newFileSize - fileSize;
+	
+	printf("Compressed: %s\n", fileName);
+	
+	if ( fileSize >= 1024 ) {
+		printf("            %zd kb\n", diff/1024);
+	} else {
+		printf("            %zd bytes\n", diff);
+	}
+}
+
+void createDirForCompressed(char array[]) {
+	char newDirPath[100];
+	
+	getcwd(newDirPath, sizeof(newDirPath));
+	writeToEnd(newDirPath, "/min/", 5);
+	mkdir(newDirPath, S_IRWXU);
+	strcpy(array, newDirPath);
 }
 
 void readToBuffer(FILE *file, char buffer[]) {
@@ -93,11 +148,7 @@ void readToBuffer(FILE *file, char buffer[]) {
 			}
 			
 			if ( isImportantPart && importantPartBufferCounter > 0 ) {
-				for ( int i = 0; i < strlen(importantPartBuffer); i++ ) {
-					buffer[counter] = importantPartBuffer[i];
-					counter += 1; 
-				}
-				
+				counter = writeToEnd(buffer, importantPartBuffer, importantPartBufferCounter);
 				arrayClear(importantPartBuffer, importantPartBufferCounter);
 				importantPartBufferCounter = 0;
 			}
@@ -119,29 +170,14 @@ void readToBuffer(FILE *file, char buffer[]) {
 	}
 }
 
-char parseFlag(char flag[]) {
-	if ( flag == NULL ) {
-		return (char) 0;
-	}
+void compressFile(char fileName[], char targetFileName[], char flag) {
+	FILE *file = fopen(fileName, "r");
+	int baseFileSize =  getFileSize(fileName);
+	char buffer[BUFFER_LEN];
 	
-	if ( flag[0] == '-') {
-		if ( flag[1] == 'm' ) {
-			return 'm';
-		}
-	}
+	readToBuffer(file, buffer);
+	file = fopen(targetFileName, "w");
+	fprintf(file, "%s", buffer);
 	
-	return (char) 0;
-}
-
-int addPrefix(char array[], int len) {
-	int prefixLen = 4;
-	
-	arrayShift(array, len, prefixLen);
-	
-	array[0] = 'm';
-	array[1] = 'i';
-	array[2] = 'n';
-	array[3] = '.';
-	
-	return len + prefixLen;
+	fclose(file);
 }
