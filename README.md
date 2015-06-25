@@ -15,13 +15,13 @@ span:before {
 }
 
 li .block {
-  background: red;
+  border: 1px solid red;
 }
 ```
 
 **min.style.css**
 ```css
-span:before{content:'What is \'Big Ban\'?';}li .block{color:red;}
+span:before{content:'What is \'Big Ban\'?';}li .block{border:1px solid red;}
 ```
 
 <hr>
