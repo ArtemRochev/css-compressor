@@ -56,12 +56,12 @@ int main(int argc, char **argv) {
 			
 			closedir (dir);
 		}
-	} else {
+	} else if ( !isFlag(argv[1]) ) {
+		size_t baseSize = getFileSize(targetFileName);
+		
 		if ( flag != 'm' ) {
 			addPrefix(targetFileName);
 		}
-		
-		size_t baseSize = getFileSize(targetFileName);
 		
 		compressFile(argv[1], targetFileName, flag);
 		printFileInfo(argv[1], baseSize, getFileSize(targetFileName));

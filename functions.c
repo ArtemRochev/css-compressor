@@ -104,14 +104,14 @@ void printInfo() {
 }
 
 void printFileInfo(char fileName[], size_t fileSize, size_t newFileSize) {
-	size_t diff =  newFileSize - fileSize;
+	size_t diff =  fileSize - newFileSize;
 	
 	printf("Compressed: %s\n", fileName);
 	
-	if ( fileSize >= 1024 ) {
-		printf("            %zd kb\n", diff/1024);
+	if ( diff >= 1024 ) {
+		printf("            -%zd kb\n", diff/1024);
 	} else {
-		printf("            %zd bytes\n", diff);
+		printf("            -%zd bytes\n", diff);
 	}
 }
 
