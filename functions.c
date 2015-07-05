@@ -19,6 +19,8 @@
 #define true 1
 #define false 0
 #define BUFFER_LEN 5000000
+#define INFO_LEN 50000
+#define INFO_FILE "info.txt"
 
 size_t getFileSize(char fileName[]) {
 	struct stat st;
@@ -38,6 +40,12 @@ const char* getFileExt(char str[]) {
 	}
 	
   	return "";
+}
+
+void file_get_content(char fileName[], char buffer[]) {
+	FILE *file = fopen(fileName, "r");
+	
+	for ( int i = 0; fscanf(file, "%c", &buffer[i]) != EOF && i < INFO_LEN; i++ );
 }
 
 char parseFlag(char flag[]) {
@@ -95,12 +103,10 @@ int isCss(char str[]) {
 }
 
 void printInfo() {
-	printf("Compress CSS file.\n");
-	printf("Removing spaces, tabs, new line charters.\n\n");
-	printf("Usage:\n");
-	printf("./compressor.out <file_name>\n\n");
-	printf("-a    compress all css files in dir and put in new /min dir\n");
-	printf("-m    modified source file\n");
+	char infoStr[INFO_LEN];
+	
+	file_get_content(INFO_FILE, infoStr);
+	printf("%s\n", infoStr);
 }
 
 void printFileInfo(char fileName[], size_t fileSize, size_t newFileSize) {

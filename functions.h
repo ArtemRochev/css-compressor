@@ -2,6 +2,8 @@ size_t getFileSize(char fileName[]);
 
 const char* getFileExt(char str[]);
 
+void file_get_content(char fileName[], char buffer[]);
+
 char parseFlag(char flag[]);
 
 int arrayClear(char array[], int len);

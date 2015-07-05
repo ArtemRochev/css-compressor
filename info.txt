@@ -1,0 +1,7 @@
+Compress CSS file.
+Removing spaces, tabs, new line charters.
+
+Usage: ./compressor.out <file_name>
+	
+	-a    compress all css files in dir and put in new /min dir
+	-m    modified source file
