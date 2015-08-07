@@ -6,15 +6,15 @@
 #include <sys/types.h>
 #include "functions.h"
 
-#define ASCII_SPACE 32
-#define ASCII_TAB 9
-#define ASCII_NEW_LINE 10
-#define ASCII_BACK_SLASH 92
-#define ASCII_SINGLE_SCOPE 39
-#define ASCII_SCOPE_OPEN 123
-#define ASCII_SCOPE_CLOSE 125
-#define ASCII_DOUBLE_DOT 58
-#define ASCII_SEMICOLON 59
+#define ASCII_TAB			9
+#define ASCII_NEW_LINE		10
+#define ASCII_SPACE			32
+#define ASCII_SINGLE_SCOPE	39
+#define ASCII_DOUBLE_DOT	58
+#define ASCII_SEMICOLON		59
+#define ASCII_BACK_SLASH	92
+#define ASCII_SCOPE_OPEN	123
+#define ASCII_SCOPE_CLOSE	125
 
 #define true 1
 #define false 0
