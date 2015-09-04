@@ -1,5 +1,4 @@
 ##CSS-Compressor
->O(N) time
 
 **usage:**
 
